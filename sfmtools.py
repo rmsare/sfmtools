@@ -14,7 +14,7 @@ def align_and_clean_photos(chunk):
             chunk.remove(camera)
     
     naligned = len(chunk.cameras)
-    print('%d/%d cameras aligned' % naligned, ncameras)
+    print('%d/%d cameras aligned' % (naligned, ncameras))
 
 
     
