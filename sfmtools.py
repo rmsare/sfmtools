@@ -5,7 +5,7 @@ import PhotoScan
 
 def align_and_clean_photos(chunk):
     ncameras = len(chunk.cameras)
-    for frames in chunk.frames:
+    for frame in chunk.frames:
         frame.matchPhotos()
 
     chunk.alignCameras()
