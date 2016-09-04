@@ -16,16 +16,16 @@ def align_and_clean_photos(chunk):
     naligned = len(chunk.cameras)
     print('%d/%d cameras aligned' % (naligned, ncameras))
 
-def export_dems(resolution, formatstring, pathname)
+def export_dems(resolution, formatstring, pathname):
     if not os.path.isdir(pathname):
         os.mkdir(pathname)
     if pathname[-1:] is not '/':
-        pathname = ''.join(pathname, '/')
+        pathname = ''.join([pathname, '/'])
         
     nchunks = len(PhotoScan.app.document.chunks)
     nexported = nchunks
     for chunk in PhotoScan.app.document.chunks:
-        filename = ''.join([pathname, chunk.label.split(' '), '.', formatstring])
+        filename = ''.join([pathname, ''.join(chunk.label.split(' ')), '.', formatstring])
         exported = chunk.exportDem(filename, format=formatstring, dx=resolution, dy=resolution)
         if not exported:
             print('Export failed:', chunk.label)
