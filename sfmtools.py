@@ -32,6 +32,23 @@ def export_dems(pathname, formatstring, resolution):
     
     print('%d/%d DEMs exported' % (nexported, nchunks))
     
+def export_orthos(pathname, resolution):
+    if not os.path.isdir(pathname):
+        os.makedirs(pathname)
+    if pathname[-1:] is not '/':
+        pathname = ''.join([pathname, '/'])
+        
+    nchunks = len(PhotoScan.app.document.chunks)
+    nexported = nchunks
+    for chunk in PhotoScan.app.document.chunks:
+        filename = ''.join([pathname, ''.join(chunk.label.split(' ')), '.tif'])
+        exported = chunk.exportOrthophotos(filename, raster_transform=PhotoScan.RasterTransformNone, write_kml=True, dx=resolution, dy=resolution, projection=chunk.crs)
+        if not exported:
+            print('Export failed:', chunk.label)
+            nexported -= 1
+    
+    print('%d/%d Orthophotos exported' % (nexported, nchunks))
+    
 def filter_photos_by_quality(chunk, threshold):
     for camera in chunk.cameras:
         if camera.frames[0].photo.meta['Image/Quality'] is None:
