@@ -5,10 +5,9 @@ import PhotoScan
 
 def align_and_clean_photos(chunk):
     ncameras = len(chunk.cameras)
-    for frame in chunk.frames:
-        frame.matchPhotos()
-
+    chunk.matchPhotos(accuracy=PhotoScan.HighAccuracy, preselection=PhotoScan.ReferencePreselection)
     chunk.alignCameras()
+    
     for camera in chunk.cameras:
         if camera.transform is None:
             chunk.remove(camera)
@@ -18,7 +17,7 @@ def align_and_clean_photos(chunk):
 
 def export_dems(pathname, formatstring, resolution):
     if not os.path.isdir(pathname):
-        os.mkdir(pathname)
+        os.makedirs(pathname)
     if pathname[-1:] is not '/':
         pathname = ''.join([pathname, '/'])
         
@@ -40,3 +39,32 @@ def filter_photos_by_quality(chunk, threshold):
         if float(camera.frames[0].photo.meta['Image/Quality']) < threshold:
             chunk.remove(camera)
   
+def batch_process(projectname, threshold, resolution):
+    doc = PhotoScan.app.document
+    if projectname[-4:] is not '.psz':
+        projectname = ''.join([projectname, '.psz'])
+    if os.path.exists(projectname):
+        doc.open(projectname)
+
+    if not os.path.isdir('dems'):
+        os.mkdir('dems')
+    if not os.path.isdir('reports'):
+        os.mkdir('reports')
+    if not os.path.isdir('orthos'):
+        os.mkdir('orthos')
+    
+    for chunk in doc.chunks:
+        filter_photos_by_quality(chunk, threshold)
+        align_and_clean_photos(chunk)
+        chunk.buildDenseCloud(quality=PhotoScan.HighQuality)
+
+    doc.alignChunks(doc.chunks, doc.chunks[0])
+    doc.mergeChunks(doc.chunks, merge_dense_clouds=True, merge_markers=True)
+    export_dems('dems/', 'tif', resolution)
+    export_orthos('orthos/', resolution)
+    
+    for chunk in doc.chunks:
+        filename = ''.join(['reports/', ''.join(chunk.label.split(' ')), '.pdf'])
+        chunk.exportReport(filename)
+        
+    doc.save(projectname)
