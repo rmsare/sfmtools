@@ -62,13 +62,11 @@ def batch_process(projectname, threshold, resolution):
         projectname = ''.join([projectname, '.psz'])
     if os.path.exists(projectname):
         doc.open(projectname)
-
-    if not os.path.isdir('dems'):
-        os.mkdir('dems')
-    if not os.path.isdir('reports'):
-        os.mkdir('reports')
-    if not os.path.isdir('orthos'):
-        os.mkdir('orthos')
+        
+    folders = ['dems', 'reports', 'orthos']
+    for folder in folders:
+        if not os.path.isdir(foldername):
+            os.mkdir(foldername)
     
     for chunk in doc.chunks:
         filter_photos_by_quality(chunk, threshold)
@@ -77,6 +75,9 @@ def batch_process(projectname, threshold, resolution):
 
     doc.alignChunks(doc.chunks, doc.chunks[0])
     doc.mergeChunks(doc.chunks, merge_dense_clouds=True, merge_markers=True)
+    chunk = doc.chunks[len(doc.chunks)-1]
+    chunk.buildModel(surface=Height, face_count=HighFaceCount)
+    
     export_dems('dems/', 'tif', resolution)
     export_orthos('orthos/', resolution)
     
