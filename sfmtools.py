@@ -16,7 +16,7 @@ def align_and_clean_photos(chunk):
     naligned = len(chunk.cameras)
     print('%d/%d cameras aligned' % (naligned, ncameras))
 
-def export_dems(resolution, formatstring, pathname):
+def export_dems(pathname, formatstring, resolution):
     if not os.path.isdir(pathname):
         os.mkdir(pathname)
     if pathname[-1:] is not '/':
@@ -33,3 +33,10 @@ def export_dems(resolution, formatstring, pathname):
     
     print('%d/%d DEMs exported' % (nexported, nchunks))
     
+def filter_photos_by_quality(chunk, threshold):
+    for camera in chunk.cameras:
+        if camera.frames[0].photo.meta['Image/Quality'] is None:
+            chunk.estimateImageQuality([camera])
+        if float(camera.frames[0].photo.meta['Image/Quality']) < threshold:
+            chunk.remove(camera)
+  
