@@ -26,7 +26,7 @@ def export_dems(resolution, formatstring, pathname):
     nexported = nchunks
     for chunk in PhotoScan.app.document.chunks:
         filename = ''.join([pathname, ''.join(chunk.label.split(' ')), '.', formatstring])
-        exported = chunk.exportDem(filename, format=formatstring, dx=resolution, dy=resolution)
+        exported = chunk.exportDem(filename, format=formatstring, dx=resolution, dy=resolution, projection=chunk.crs)
         if not exported:
             print('Export failed:', chunk.label)
             nexported -= 1
