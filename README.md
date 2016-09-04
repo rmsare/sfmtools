@@ -1,3 +1,3 @@
 # sfmtools
 
-Scripts for processing tasks in photogrammetry and structure from motion
+Utility functions for pipeline processing tasks in photogrammetry and structure from motion using Agisoft PhotoScan
