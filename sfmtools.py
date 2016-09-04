@@ -19,6 +19,8 @@ def align_and_clean_photos(chunk):
 def export_dems(resolution, formatstring, pathname)
     if not os.path.isdir(pathname):
         os.mkdir(pathname)
+    if pathname[-1:] is not '/':
+        pathname = ''.join(pathname, '/')
         
     nchunks = len(PhotoScan.app.document.chunks)
     nexported = nchunks
