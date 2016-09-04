@@ -1,6 +1,6 @@
 """ Utility functions for PhotoScan processing """
 
-import os
+import os, sys
 import PhotoScan
 
 def align_and_clean_photos(chunk):
@@ -16,5 +16,18 @@ def align_and_clean_photos(chunk):
     naligned = len(chunk.cameras)
     print('%d/%d cameras aligned' % (naligned, ncameras))
 
-
+def export_dems(resolution, formatstring, pathname)
+    if not os.path.isdir(pathname):
+        os.mkdir(pathname)
+        
+    nchunks = len(PhotoScan.app.document.chunks)
+    nexported = nchunks
+    for chunk in PhotoScan.app.document.chunks:
+        filename = ''.join([pathname, chunk.label.split(' '), '.', formatstring])
+        exported = chunk.exportDem(filename, format=formatstring, dx=resolution, dy=resolution)
+        if not exported:
+            print('Export failed:', chunk.label)
+            nexported -= 1
+    
+    print('%d/%d DEMs exported' % (nexported, nchunks))
     
