@@ -65,8 +65,8 @@ def batch_process(projectname, threshold, resolution):
         
     folders = ['dems', 'reports', 'orthos']
     for folder in folders:
-        if not os.path.isdir(foldername):
-            os.mkdir(foldername)
+        if not os.path.isdir(folder):
+            os.mkdir(folder)
     
     for chunk in doc.chunks:
         filter_photos_by_quality(chunk, threshold)
