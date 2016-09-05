@@ -76,7 +76,7 @@ def batch_process(projectname, threshold, resolution):
     doc.alignChunks(doc.chunks, doc.chunks[0])
     doc.mergeChunks(doc.chunks, merge_dense_clouds=True, merge_markers=True)
     chunk = doc.chunks[len(doc.chunks)-1]
-    chunk.buildModel(surface=Height, face_count=HighFaceCount)
+    chunk.buildModel(surface=PhotoScan.HeightField, face_count=PhotoScan.HighFaceCount)
     
     export_dems('dems/', 'tif', resolution)
     export_orthos('orthos/', resolution)
