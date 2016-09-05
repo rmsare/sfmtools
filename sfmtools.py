@@ -77,12 +77,11 @@ def batch_process(projectname, threshold, resolution):
     doc.mergeChunks(doc.chunks, merge_dense_clouds=True, merge_markers=True)
     chunk = doc.chunks[len(doc.chunks)-1]
     chunk.buildModel(surface=PhotoScan.HeightField, face_count=PhotoScan.HighFaceCount)
-    
-    export_dems('dems/', 'tif', resolution)
-    export_orthos('orthos/', resolution)
+    chunk.exportDem(''.join(['dems/', ''.join(chunk.label.split(' ')), '.tif']), format='tif', dx=resolution, dy=resolution, projecton=chunk.crs)
+    chunk.exportOrthophotos(''.join(['orthos/', ''.join(chunk.label.split(' ')), '_ortho.tif']), raster_transform=PhotoScan.RasterTransformNone, write_kml=True, dx=resolution, dy=resolution, projection=chunk.crs)
     
     for chunk in doc.chunks:
-        filename = ''.join(['reports/', ''.join(chunk.label.split(' ')), '.pdf'])
+        filename = ''.join(['reports/report_', ''.join(chunk.label.split(' ')), '.pdf'])
         chunk.exportReport(filename)
         
     doc.save(projectname)
