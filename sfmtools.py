@@ -15,7 +15,7 @@ def align_and_clean_photos(chunk):
     naligned = len(chunk.cameras)
     print('%d/%d cameras aligned' % (naligned, ncameras))
 
-def export_dems(pathname, formatstring, resolution):
+def export_dems(pathname, formatstring, resolution=0.5):
     if not os.path.isdir(pathname):
         os.makedirs(pathname)
     if pathname[-1:] != '/':
@@ -32,7 +32,7 @@ def export_dems(pathname, formatstring, resolution):
     
     print('%d/%d DEMs exported' % (nexported, nchunks))
     
-def export_orthos(pathname, resolution):
+def export_orthos(pathname, resolution=0.5):
     if not os.path.isdir(pathname):
         os.makedirs(pathname)
     if pathname[-1:] != '/':
@@ -56,7 +56,7 @@ def filter_photos_by_quality(chunk, threshold=0.7):
         if float(camera.frames[0].photo.meta['Image/Quality']) < threshold:
             chunk.remove(camera)
   
-def batch_process(projectname, threshold=0.7, resolution):
+def batch_process(projectname, threshold=0.7, resolution=0.5):
     doc = PhotoScan.app.document
     if projectname[-4:] != '.psz':
         projectname = ''.join([projectname, '.psz'])
