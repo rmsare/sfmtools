@@ -49,14 +49,14 @@ def export_orthos(pathname, resolution):
     
     print('%d/%d Orthophotos exported' % (nexported, nchunks))
     
-def filter_photos_by_quality(chunk, threshold):
+def filter_photos_by_quality(chunk, threshold=0.7):
     for camera in chunk.cameras:
         if camera.frames[0].photo.meta['Image/Quality'] is None:
             chunk.estimateImageQuality([camera])
         if float(camera.frames[0].photo.meta['Image/Quality']) < threshold:
             chunk.remove(camera)
   
-def batch_process(projectname, threshold, resolution):
+def batch_process(projectname, threshold=0.7, resolution):
     doc = PhotoScan.app.document
     if projectname[-4:] != '.psz':
         projectname = ''.join([projectname, '.psz'])
