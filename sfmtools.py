@@ -18,7 +18,7 @@ def align_and_clean_photos(chunk):
 def export_dems(pathname, formatstring, resolution):
     if not os.path.isdir(pathname):
         os.makedirs(pathname)
-    if pathname[-1:] is not '/':
+    if pathname[-1:] != '/':
         pathname = ''.join([pathname, '/'])
         
     nchunks = len(PhotoScan.app.document.chunks)
@@ -35,7 +35,7 @@ def export_dems(pathname, formatstring, resolution):
 def export_orthos(pathname, resolution):
     if not os.path.isdir(pathname):
         os.makedirs(pathname)
-    if pathname[-1:] is not '/':
+    if pathname[-1:] != '/':
         pathname = ''.join([pathname, '/'])
         
     nchunks = len(PhotoScan.app.document.chunks)
@@ -58,7 +58,7 @@ def filter_photos_by_quality(chunk, threshold):
   
 def batch_process(projectname, threshold, resolution):
     doc = PhotoScan.app.document
-    if projectname[-4:] is not '.psz':
+    if projectname[-4:] != '.psz':
         projectname = ''.join([projectname, '.psz'])
     if os.path.exists(projectname):
         doc.open(projectname)
